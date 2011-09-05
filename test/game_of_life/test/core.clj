@@ -41,3 +41,7 @@
             [false true false]]
           (next-generation world)))))
 
+(deftest handles-asymmetric-world
+  (let [world [[true true true]]]
+    (is (= [[false true false]] (next-generation world)))))
+
