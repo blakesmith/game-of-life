@@ -10,18 +10,20 @@
    [0 1]
    [1 1]])
 
+(defn create-cell [alive x y]
+  {:alive alive :x x :y y})
+
 (defn cell-at [loc world]
-  (let [[x y] loc
-        alive (get (get world y) x)]
-    {:alive alive :x x :y y}))
+  (let [[x y] loc]
+    (get (get world y) x)))
 
 (defn find-neighbors [cell world]
   (let [x (cell :x) y (cell :y)]
-    (map
+    (remove nil? (map
       (fn [cord]
         (cell-at [(+ x (first cord)) (+ y (second cord))]
                  world))
-      neighbor-cords)))
+      neighbor-cords))))
 
 (defn alive-next? [cell world]
   (let [total-neighbors
@@ -38,7 +40,7 @@
       (fn [row y]
         (vec (map
           (fn [col x]
-            (alive-next? (cell-at [x y] world) world))
+            (create-cell (alive-next? (cell-at [x y] world) world) x y))
           row (range cols))))
       world (range rows)))))
 

@@ -3,45 +3,85 @@
   (:use [clojure.test]))
 
 (deftest querying-cell-at-x-y
-  (let [world [[false true false]]]
+  (let [world [[{:alive false :x 0 :y 0}
+                {:alive true :x 1 :y 0}
+                {:alive false :x 2 :y 0}]]]
     (is (= {:alive true :x 1 :y 0} (cell-at [1 0] world)))))
 
 (deftest not-alive-if-fewer-than-two-neighbors
-  (let [world [[false true true]]]
+  (let [world [[{:alive false :x 0 :y 0}
+                {:alive true :x 1 :y 0}
+                {:alive true :x 2 :y 0}]]]
     (is (= false (alive-next? (cell-at [1 0] world) world)))))
 
 (deftest alive-if-two-neighbors-alive
-  (let [world [[true true true]]]
+  (let [world [[{:alive true :x 0 :y 0}
+                {:alive true :x 1 :y 0}
+                {:alive true :x 2 :y 0}]]]
     (is (= true (alive-next? (cell-at [1 0] world) world)))))
 
 (deftest alive-if-three-neighbors-alive
-  (let [world [[true true true]
-               [false true false]
-               [false false false]]]
+  (let [world [[{:alive true :x 0 :y 0}
+                {:alive true :x 1 :y 0}
+                {:alive true :x 2 :y 0}]
+               [{:alive false :x 0 :y 1}
+                {:alive true :x 1 :y 1}
+                {:alive false :x 2 :y 1}]
+               [{:alive false :x 0 :y 2}
+                {:alive false :x 1 :y 2}
+                {:alive false :x 2 :y 2}]]]
     (is (= true (alive-next? (cell-at [1 1] world) world)))))
 
 (deftest dead-if-more-than-three-neighbors-alive
-  (let [world [[true true true]
-               [true true false]
-               [false false false]]]
+  (let [world [[{:alive true :x 0 :y 0}
+                {:alive true :x 1 :y 0}
+                {:alive true :x 2 :y 0}]
+               [{:alive true :x 0 :y 1}
+                {:alive true :x 1 :y 1}
+                {:alive false :x 2 :y 1}]
+               [{:alive false :x 0 :y 2}
+                {:alive false :x 1 :y 2}
+                {:alive false :x 2 :y 2}]]]
     (is (= false (alive-next? (cell-at [1 1] world) world)))))
 
 (deftest dead-doesnt-come-back-to-life-if-more-than-two-neighbors
-  (let [world [[true true false]
-               [false false false]
-               [false false false]]]
+  (let [world [[{:alive true :x 0 :y 0}
+                {:alive true :x 1 :y 0}
+                {:alive false :x 2 :y 0}]
+               [{:alive false :x 0 :y 1}
+                {:alive false :x 1 :y 1}
+                {:alive false :x 2 :y 1}]
+               [{:alive false :x 0 :y 2}
+                {:alive false :x 1 :y 2}
+                {:alive false :x 2 :y 2}]]]
     (is (= false (alive-next? (cell-at [1 1] world) world)))))
 
 (deftest blinker-test
-  (let [world [[false false false]
-               [true true true]
-               [false false false]]]
-    (is (= [[false true false]
-            [false true false]
-            [false true false]]
-          (next-generation world)))))
+  (let [world [[{:alive false :x 0 :y 0}
+                {:alive false :x 1 :y 0}
+                {:alive false :x 2 :y 0}]
+               [{:alive true :x 0 :y 1}
+                {:alive true :x 1 :y 1}
+                {:alive true :x 2 :y 1}]
+               [{:alive false :x 0 :y 2}
+                {:alive false :x 1 :y 2}
+                {:alive false :x 2 :y 2}]]]
+
+    (is (= [[{:alive false :x 0 :y 0}
+             {:alive true :x 1 :y 0}
+             {:alive false :x 2 :y 0}]
+            [{:alive false :x 0 :y 1}
+             {:alive true :x 1 :y 1}
+             {:alive false :x 2 :y 1}]
+            [{:alive false :x 0 :y 2}
+             {:alive true :x 1 :y 2}
+             {:alive false :x 2 :y 2}]]
+         (next-generation world)))))
 
 (deftest handles-asymmetric-world
-  (let [world [[true true true]]]
-    (is (= [[false true false]] (next-generation world)))))
+  (let [world [[{:alive true :x 0 :y 0}
+                {:alive true :x 1 :y 0}
+                {:alive true :x 2 :y 0}]]]
+    (is (= [[{:alive false :x 0 :y 0} {:alive true :x 1 :y 0} {:alive false :x 2 :y 0}]]
+         (next-generation world)))))
 
