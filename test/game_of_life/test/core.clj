@@ -13,3 +13,15 @@
 (deftest alive-if-two-neighbors-alive
   (let [world [[true true true]]]
     (is (= true (alive-next? (cell-at [1 0] world) world)))))
+
+(deftest alive-if-three-neighbors-alive
+  (let [world [[true true true]
+               [false true false]
+               [false false false]]]
+    (is (= true (alive-next? (cell-at [1 1] world) world)))))
+
+(deftest dead-if-more-than-three-neighbors-alive
+  (let [world [[true true true]
+               [true false false]
+               [false false false]]]
+    (is (= false (alive-next? (cell-at [1 1] world) world)))))

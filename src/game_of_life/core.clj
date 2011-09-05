@@ -1,12 +1,18 @@
 (ns game-of-life.core)
 
 (def neighbor-cords
-  [[-1 0]
-   [1 0]])
+  [[-1 -1]
+   [0 -1]
+   [1 -1]
+   [-1 0]
+   [1 0]
+   [-1 1]
+   [0 1]
+   [1 1]])
 
 (defn cell-at [loc world]
   (let [[x y] loc
-        alive (nth (nth world y) x)]
+        alive (get (get world y) x)]
     {:alive alive :x x :y y}))
 
 (defn find-neighbors [cell world]
@@ -18,6 +24,7 @@
       neighbor-cords)))
 
 (defn alive-next? [cell world]
-  (<= 2
+  (let [total-neighbors
     (count
-      (filter #(= true (% :alive)) (find-neighbors cell world)))))
+      (filter #(= true (% :alive)) (find-neighbors cell world)))]
+    (or (= total-neighbors 2) (= total-neighbors 3))))
