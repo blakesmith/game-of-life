@@ -22,6 +22,12 @@
 
 (deftest dead-if-more-than-three-neighbors-alive
   (let [world [[true true true]
-               [true false false]
+               [true true false]
+               [false false false]]]
+    (is (= false (alive-next? (cell-at [1 1] world) world)))))
+
+(deftest dead-doesnt-come-back-to-life-if-more-than-two-neighbors
+  (let [world [[true true false]
+               [false false false]
                [false false false]]]
     (is (= false (alive-next? (cell-at [1 1] world) world)))))
