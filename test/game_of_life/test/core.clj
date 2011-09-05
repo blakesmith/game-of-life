@@ -31,3 +31,13 @@
                [false false false]
                [false false false]]]
     (is (= false (alive-next? (cell-at [1 1] world) world)))))
+
+(deftest blinker-test
+  (let [world [[false false false]
+               [true true true]
+               [false false false]]]
+    (is (= [[false true false]
+            [false true false]
+            [false true false]]
+          (next-generation world)))))
+
