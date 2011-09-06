@@ -85,3 +85,9 @@
     (is (= [[{:alive false :x 0 :y 0} {:alive true :x 1 :y 0} {:alive false :x 2 :y 0}]]
          (next-generation world)))))
 
+(deftest new-world-creation
+  (is (= [[{:alive false :x 0 :y 0}
+           {:alive false :x 1 :y 0}]
+          [{:alive false :x 0 :y 1}
+           {:alive false :x 1 :y 1}]]
+         (new-world 2 2))))

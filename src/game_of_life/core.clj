@@ -33,14 +33,27 @@
       (and (not (cell :alive)) (= total-neighbors 3))
       (and (cell :alive) (or (= total-neighbors 2) (= total-neighbors 3))))))
 
-(defn next-generation [world]
+(defn apply-to-world [f world]
   (let [rows (count world)
         cols (count (first world))]
     (vec (map
       (fn [row y]
         (vec (map
-          (fn [col x]
-            (create-cell (alive-next? (cell-at [x y] world) world) x y))
+          (fn [_ x]
+            (f x y))
           row (range cols))))
       world (range rows)))))
+
+(defn next-generation [world]
+  (apply-to-world
+    (fn [x y]
+      (create-cell (alive-next? (cell-at [x y] world) world) x y))
+    world))
+
+(defn new-world [width height]
+  (let [world (map (fn [_] (range width)) (range height))]
+    (apply-to-world
+      (fn [x y]
+        (create-cell false x y))
+      world)))
 
