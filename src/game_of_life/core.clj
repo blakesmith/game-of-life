@@ -27,8 +27,8 @@
 
 (defn alive-next? [cell world]
   (let [total-neighbors
-    (count
-      (filter #(= true (% :alive)) (find-neighbors cell world)))]
+          (count
+          (filter #(= true (% :alive)) (find-neighbors cell world)))]
     (or
       (and (not (cell :alive)) (= total-neighbors 3))
       (and (cell :alive) (or (= total-neighbors 2) (= total-neighbors 3))))))
