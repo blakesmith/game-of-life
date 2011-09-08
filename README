@@ -1,13 +1,9 @@
 # game-of-life
 
-FIXME: write description
-
-## Usage
-
-FIXME: write
+Teaching myself Clojure by implementing Conway's Game of Life.
 
 ## License
 
-Copyright (C) 2011 FIXME
+Copyright (C) 2011 Blake Smith
 
-Distributed under the Eclipse Public License, the same as Clojure.
+Distributed under the BSD license
